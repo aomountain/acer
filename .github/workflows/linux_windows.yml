@@ -1,0 +1,31 @@
+name: Linux v.s. windows
+on: workflow_dispatch
+jobs:
+  build_ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test on Ubuntu
+        run: |
+          date +'%F@%T';
+          free -m;
+  # build_alpine:
+  #   runs-on: ubuntu-latest
+  #   container:
+  #      image: docker.io/aomountainu/alpine:latest
+  #   steps:
+  #     - name: Test on Ubuntu
+  #       run: |
+  #         cat /etc/alpine-release;
+  #         date +'%F@%T';
+  #         free -m;
+  build_windows:
+    runs-on: windows-latest
+    steps:
+      - name: Test on Windows
+        run: |
+          Get-Date
+          # Get-WmiObject WIN32_PROCESS | Sort-Object -Property ws -Descending | Select-Object -first 10
+          $CompObject =  Get-WmiObject -Class WIN32_OperatingSystem
+          Write-Output "total:" ($CompObject.TotalVisibleMemorySize / 1024)
+          Write-Output "used:" (($CompObject.TotalVisibleMemorySize - $CompObject.FreePhysicalMemory) / 1024)
+          Write-Output "free:" ($CompObject.FreePhysicalMemory / 1024)
